@@ -12,6 +12,9 @@ import boto3
 import zipfile
 import logging
 import optparse
+import subprocess
+
+
 from .utils import TemporaryDirectory
 from .version import __version__
 
@@ -134,9 +137,8 @@ class LambdaDeploy(object):
                         '-t',
                         temp_dir
                     ]
-
                     # Do pip install to temporary dir
-                    if pip.main(pip_args) == 0:
+                    if subprocess.check_call([sys.executable,'-m','pip']+pip_args) == 0:
                         self.add_directory_to_zip(temp_dir, zf)
                     else:
                         if sys.platform == 'darwin':
